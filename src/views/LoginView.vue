@@ -9,7 +9,7 @@
                             <v-img :src="i.user_profil" height="62%">
                                 <v-row flat class="mx-1 my-1" color="rgba(0, 0, 0, 0)">
                                     <v-spacer />
-                                    <v-icon color="error" style="text-shadow: 2px 2px 5px black;">mdi-close-circle</v-icon>
+                                    <v-icon color="error" style="text-shadow: 2px 2px 5px black;" @click="console.log('close')">mdi-close-circle</v-icon>
                                 </v-row>
                             </v-img>
                             <div class="my-2 mx-4" @click="selectconnect(i)">
