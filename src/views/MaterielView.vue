@@ -110,7 +110,8 @@
         alert:false,
         alertMsg:'',
         typeAlert:'success',
-        id_user:null,
+        id_user: null,
+        roleId:null,
       }
     },
     computed: {
@@ -205,11 +206,21 @@
           }
         }
       },
+      getUserConnected() {
+        let user = localStorage.getItem('user')
+        user = JSON.parse(user)
+        this.id_user = user[0].id_user
+        this.roleId = user[0].id_role
+      },
     },
     mounted() {
       document.title = this.$route.meta.title || "Laboratoire d'analyse"
-      this.id_user=localStorage.getItem('id_user')
       this.getAll()
+      this.getUserConnected()
+      if (this.roleId != 5 && this.roleId != 1 && this.roleId != 2) {
+        alert('Vous n\'êtes pas d\'accée à cette page.')
+        window.history.back()
+      }
     },
   }
 </script>

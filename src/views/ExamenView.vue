@@ -111,7 +111,9 @@ export default {
             sortBy: 'nom',
             keys: ['nom', 'adresse', 'contact', 'numero', 'age', 'numero', 'sexe'],
             examselect:null,
-            idSelected:null,
+            idSelected: null,
+            idconnect: null,
+            roleId:null,
         }
     },
     components:{newExamen,deleteDialog,alertMessage,},
@@ -153,11 +155,22 @@ export default {
           await service.getAllMat(data.id_examen)
           .then(res=>{this.materiels=res.data.data})
           .catch(err=>{console.log(err)})
-        }
+        },
+        getUserConnected() {
+            let user = localStorage.getItem('user')
+            user = JSON.parse(user)
+            this.idconnect = user[0].id_user
+            this.roleId = user[0].id_role
+        },
     },
     mounted(){
         document.title = this.$route.meta.title || "Laboratoire d'analyse"
         this.getAll()
+        this.getUserConnected()
+        if (this.roleId !== 5 && this.roleId !== 3 && this.roleId !== 1 && this.roleId !== 2) {
+            alert('Vous n\'êtes pas d\'accée à cette page.')
+            window.history.back()
+        }
     }
 }
 </script>

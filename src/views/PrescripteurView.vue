@@ -25,7 +25,7 @@
             > 
             <template v-slot:default="props">
                 <v-row class="pa-2 mt-4">
-                    <v-col md="3" cols="12" v-for="e in props.items" :key="e.nom_prescripteur" class="my-2">
+                    <v-col md="3" cols="6" sm="12" v-for="e in props.items" :key="e.nom_prescripteur" class="my-2">
                         <v-card :class="$vuetify.theme.dark?'grey darken-3':'elevation-3 '" min-height="100px" id="create">
                             <v-speed-dial 
                             direction="right"
@@ -100,7 +100,9 @@ export default {
             delMsg: '',
             selected: null,
             nom_prescripteur:'',
-            search:'',
+            search: '',
+            idconnect:null,
+            roleId:null,
         }
     },
     methods: {
@@ -157,6 +159,12 @@ export default {
             this.edt=false
             this.nom_prescripteur=''
         },
+        getUserConnected() {
+            let user = localStorage.getItem('user')
+            user = JSON.parse(user)
+            this.idconnect = user[0].id_user
+            this.roleId = user[0].id_role
+        },
     },
     computed: {
         
@@ -164,6 +172,11 @@ export default {
     mounted() {
         document.title = this.$route.meta.title || "Laboratoire d'analyse"
         this.getAll()
+        this.getUserConnected()
+        if (this.roleId != 5 && this.roleId != 3) {
+            alert('Vous n\'êtes pas d\'accée à cette page.')
+            window.history.back()
+        }
     },
 }
 </script>

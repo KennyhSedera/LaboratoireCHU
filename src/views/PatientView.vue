@@ -23,7 +23,7 @@
             <v-data-iterator hide-default-footer :items="items" :items-per-page.sync="itemsPerPage" :page.sync="page"
                 :search="search" :sort-desc="sortDesc" v-if="items.length > 0">
                 <template v-slot:default="props">
-                    <v-card-text class="px-12" style="max-height:465px;">
+                    <v-card-text class="px-md-12" style="max-height:465px;">
                         <v-simple-table class="elevation-3">
                             <template v-slot:default>
                                 <thead>
@@ -110,6 +110,7 @@ export default {
             keys: ['nom', 'adresse', 'contact', 'numero', 'age', 'numero', 'sexe'],
             patselect: '',
             idconnect: null,
+            roleId: null,
             nompat: '',
         }
     },
@@ -170,12 +171,17 @@ export default {
             let user = localStorage.getItem('user')
             user = JSON.parse(user)
             this.idconnect = user[0].id_user
+            this.roleId = user[0].id_role
         },
     },
     mounted() {
         document.title = this.$route.meta.title || "Laboratoire d'analyse"
         this.getAll(); this.$refs.form.getAll()
         this.getUserConnected()
+        if (this.roleId != 5 && this.roleId != 3) {
+            alert('Vous n\'êtes pas d\'accée à cette page.')
+            window.history.back()
+        }
     },
 }
 </script>

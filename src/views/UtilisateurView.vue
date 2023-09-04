@@ -29,7 +29,7 @@
 
         <v-card outlined class="overflow-auto transparent pa-4" height="475">
             <v-row class="py-2 pa-1">
-                <v-col md="3" cols="12" v-for="u in userAll" :key="u.id_user">
+                <v-col md="3" cols="6" sm="12" v-for="u in userAll" :key="u.id_user">
                     <v-card min-height="100px" class="elevation-5 pb-2">
                         <v-btn v-if="tab==2" class="ml-n4 mt-n5 red" small icon @click="deletItem(u)"><v-icon small class="white--text">fa-trash</v-icon></v-btn>
                         <v-card class="pa-2 mt-n4 transparent" outlined>
@@ -82,6 +82,7 @@ export default {
             filter: {},
             count: null,
             idconnect:null,
+            roleId:null,
         }
     },
     methods: {
@@ -89,7 +90,8 @@ export default {
             let user = localStorage.getItem('user')
             user = JSON.parse(user)
             this.idconnect = user[0].id_user
-        },   
+            this.roleId = user[0].id_role
+        },
         filteredKeys () { 
             if (this.search===''){
                 this.getUser()
@@ -162,6 +164,11 @@ export default {
         this.getUser()
         this.getcount()
         this.getUserConnected()
+        this.user()
+        if (this.roleId !== 5) {
+            alert('Vous n\'êtes pas d\'accée à cette page.')
+            window.history.back()   
+        }
     },
 }
 </script>

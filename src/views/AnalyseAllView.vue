@@ -50,7 +50,7 @@
                                         <td>{{ setDate(item.createdAt) }}</td>
                                         <td class="text-center">
                                             <v-icon small class="red--text" @click="deleteItem(item)">fa-trash</v-icon>
-                                            <v-icon v-if="item.validation == true " small class="grey--text ml-2" @click="selectItem(item)">fa-eye</v-icon>
+                                            <v-icon v-if="item.validation == true && roleId==1 || roleId==2" small class="grey--text ml-2" @click="selectItem(item)">fa-eye</v-icon>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -189,6 +189,10 @@ export default {
         document.title = this.$route.meta.title || "Laboratoire d'analyse"
         this.getAll(); this.$refs.form.getAll()
         this.getUserConnected()
+        if (this.roleId != 5 && this.roleId != 1 && this.roleId != 2 && this.roleId != 4 && this.roleId != 3) {
+            alert('Vous n\'êtes pas d\'accée à cette page.')
+            window.history.back()
+        }
     },
 }
 </script>

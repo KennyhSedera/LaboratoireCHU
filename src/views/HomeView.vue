@@ -8,14 +8,64 @@
       <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" class="top">
         <v-row class="justify-center align-center">
           <v-card 
-            v-for="n in liens" 
-            :key="n.title" width="200" height="155" 
+            width="200" height="155" 
             :class="$vuetify.theme.dark?'sombre':''" 
             class="ma-1 pb-10 elevation-8 text-center" 
-            router :to="n.route" 
+            router to="/examen" 
+            v-if="roleId==5 || roleId==3 || roleId == 1 || roleId == 2"
           >
-            <v-icon size="120">{{n.icon}}</v-icon>
-            <div class=" text-h5 font-weight-black" >{{ n.title }}</div>
+            <v-icon size="120">mdi-tag-multiple</v-icon>
+            <div class=" text-h5 font-weight-black" >Examens</div>
+          </v-card>
+          <v-card 
+            width="200" height="155" 
+            :class="$vuetify.theme.dark?'sombre':''" 
+            class="ma-1 pb-10 elevation-8 text-center" 
+            router to="/prescripteur" 
+            v-if="roleId==5 || roleId == 3"
+          >
+            <v-icon size="120">fa-user-md</v-icon>
+            <div class=" text-h5 font-weight-black" >Prescripteurs</div>
+          </v-card>
+          <v-card 
+            width="200" height="155" 
+            :class="$vuetify.theme.dark?'sombre':''" 
+            class="ma-1 pb-10 elevation-8 text-center" 
+            router to="/materiel" 
+            v-if="roleId==5 || roleId == 1 || roleId == 2"
+          >
+            <v-icon size="120">mdi-flask</v-icon>
+            <div class=" text-h5 font-weight-black" >Matériels</div>
+          </v-card>
+          <v-card 
+            width="200" height="155" 
+            :class="$vuetify.theme.dark?'sombre':''" 
+            class="ma-1 pb-10 elevation-8 text-center" 
+            router to="/patient" 
+            v-if="roleId==5 || roleId == 3"
+          >
+            <v-icon size="120">mdi-account-group-outline</v-icon>
+            <div class=" text-h5 font-weight-black" >Patients</div>
+          </v-card>
+          <v-card 
+            width="200" height="155" 
+            :class="$vuetify.theme.dark?'sombre':''" 
+            class="ma-1 pb-10 elevation-8 text-center" 
+            router to="/analyse" 
+            v-if="roleId==5 || roleId == 1 || roleId == 2 || roleId == 4 || roleId == 3"
+          >
+            <v-icon size="120">mdi-tag-outline</v-icon>
+            <div class=" text-h5 font-weight-black" >Analyses</div>
+          </v-card>
+          <v-card 
+            width="200" height="155" 
+            :class="$vuetify.theme.dark?'sombre':''" 
+            class="ma-1 pb-10 elevation-8 text-center" 
+            router to="/utilisateur" 
+            v-if="roleId==5"
+          >
+            <v-icon size="120">mdi-account-supervisor-circle-outline</v-icon>
+            <div class=" text-h5 font-weight-black" >Utilisateurs</div>
           </v-card>
         </v-row>
       </v-col>
@@ -27,37 +77,12 @@
     import carrousel from '@/components/cardCarousel'
     import moment from 'moment'
 
-    export default{
+export default {
+      name:'HomeView',
         data(){
           return{
-            logout: false,
-            patients:[],
-            chartData: {
-              labels: [],
-              datasets: []
-            },
-            entreeData: {
-              labels: [],
-              datasets: []
-            },
-            sortieData: {
-              labels: [],
-              datasets: []
-            },
-            materielData: {
-              labels: [],
-              datasets: []
-            },
-            liens:[
-              {title:'Examens', icon:'mdi-tag-multiple', route:'/examen'},
-              {title:'Prescripteurs', icon:'fa-user-md', route:'/prescripteur'},
-              {title:'Matériels', icon:'mdi-flask', route:'/materiel'},
-              {title:'Patients', icon:'mdi-account-group', route:'/patient'},
-              {title:'Analyses', icon:'mdi-tag', route:'/analyse'},
-              {title:'Utilisateurs', icon:'mdi-account-circle', route:'/utilisateur'},
-            ],
-            Pseudo: '',
-            img: '',
+            roleId: null,
+            idconnect: null,
           }
         },
         components:{
@@ -67,9 +92,16 @@
           setDate(date){
             return moment(date).format('DD MMM')
           },
+          getUserConnected() {
+            let user = localStorage.getItem('user')
+            user = JSON.parse(user)
+            this.idconnect = user[0].id_user
+            this.roleId = user[0].id_role
+          },
         },
         mounted(){
           document.title = this.$route.meta.title || "Laboratoire d'analyse"
+          this.getUserConnected()
         }
     }
 </script>

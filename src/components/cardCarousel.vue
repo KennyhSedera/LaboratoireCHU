@@ -2,8 +2,8 @@
     <div>
       <v-row class="text-center">
         <!-- <v-card height="300" class="elevation-8 mx-auto col-12"> -->
-          <v-carousel hide-delimiters show-arrows-on-hover cycle height="300">
-            <v-carousel-item v-for="(item,i) in images" :key="i" :src="item.src"></v-carousel-item>
+          <v-carousel hide-delimiters show-arrows-on-hover cycle height="89vh">
+            <v-carousel-item v-for="(item,i) in images" :key="i.src" :src="item.src"></v-carousel-item>
           </v-carousel>
         <!-- </v-card> -->
       </v-row>

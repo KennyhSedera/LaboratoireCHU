@@ -1,7 +1,7 @@
 <template>
-    <v-img src="CHU-TAMBOHOBE.png" class="fill-height img d-flex align-center" max-height="662">
+    <v-img src="CHU-TAMBOHOBE.png" class="fill-height img d-flex align-center" max-height="100vh">
         <v-row>
-            <v-col cols="12" md="7" class="d-flex align-center">
+            <v-col v-if="$vuetify.breakpoint.mdAndUp" cols="12" md="7" class="d-flex align-center">
                 <v-row class="mx-1">
                     <div class="text-center font-weight-black white--text text-uppercase ml-4 text-md-h4">laboratoire d'analyse CHU TAMBOHOBE</div>
                     <v-col class="mx-1" v-for="i in usersession" :key="i.id_user">
@@ -12,7 +12,7 @@
                                     <v-icon color="error" style="text-shadow: 2px 2px 5px black;" @click="console.log('close')">mdi-close-circle</v-icon>
                                 </v-row>
                             </v-img>
-                            <div class="my-2 mx-4" @click="selectconnect(i)">
+                            <div class="my-2 mx-4" @click="selectconnect(i)" style="cursor: pointer;">
                                 <div class="headline">{{i.username}}</div>
                                 <div class="text-caption">({{i.email }})</div>
                                  <v-btn

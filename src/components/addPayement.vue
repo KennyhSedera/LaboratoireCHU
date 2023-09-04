@@ -5,7 +5,6 @@
                 <v-row flat class="mx-1 mt-1 py-2 mb-1" color="rgba(0, 0, 0, 0)">
                     <span class="ml-4 text-h6 font-weight-bold">Droit d'analyse.</span>
                     <v-spacer />
-                    <v-icon @click="$emit('close'); reset()" color="error" style="text-shadow: 2px 2px 5px black;">mdi-close-circle</v-icon>
                 </v-row>
                 <v-row class="mx-1">
                     <v-col v-for="i in items" :key="i.id_list" cols="6">
