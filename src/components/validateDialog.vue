@@ -27,7 +27,7 @@ import actionService from '@/services/actionService'
 import alertMessage from '@/components/alertMessage'
 
 export default {
-    components:{ alertMessage },
+    components: { alertMessage },
     props: ['open', 'message', 'data'],
     computed: {
         dialog() { return this.open }
@@ -37,9 +37,10 @@ export default {
             idconnect: '',
             id: '',
             examens: [],
-            materiel:[],
-            idExamens:[],
-            sorties:[],
+            materiel: [],
+            idExamens: [],
+            sorties: [],
+            ids: [],
             alert: false,
             alertMsg: '',
             typeAlert: 'error',
@@ -49,48 +50,71 @@ export default {
         getId(data) {
             this.id = data
             ListeService.getAll(this.id)
-            .then((res)=>{
-                this.idExamens.splice(0, this.idExamens.length)
-                this.examens = res.data
-                this.examens.forEach(el => this.idExamens.push(el.id_examen))
-                this.getmateriel()
-            }).catch((err)=>{
-                console.log(err)
-            })
+                .then((res) => {
+                    this.idExamens.splice(0, this.idExamens.length)
+                    this.examens = res.data
+                    this.examens.forEach(el => this.idExamens.push(el.id_examen))
+                    this.getmateriel()
+                }).catch((err) => {
+                    console.log(err)
+                })
         },
-        getmateriel() {   
-        this.materiel.splice(0, this.materiel.length)
-        this.idExamens.forEach(el => service.getAllMat(el)
-            .then(res => {
-                this.materiel.push(res.data.data)
-            }))
-        },
-        matSortie() {
-            this.materiel.forEach(el =>
-            matService.sortie(el[0])
+        getmateriel() {
+            this.materiel.splice(0, this.materiel.length)
+            this.ids.splice(0, this.ids.length)
+            this.idExamens.forEach(el =>
+                service.getAllMat(el)
                 .then(res => {
-                    if (res.data.error) {
-                        this.alert = true
-                        this.alertMsg = res.data.error
-                        this.typeAlert = 'error'
+                    for (let index = 0; index < res.data.data.length; index++){
+                        this.materiel.push({ id: res.data.data[index].id_materiel, quant: res.data.data[index].quantite_mat })
+                        const id = this.ids.filter(el => el === res.data.data[index].id_materiel)
+                        if (id!==[]) {
+                            console.log(id);
+                        } else {
+                            this.ids.push(res.data.data[index].id_materiel)
+                        }
+                        if (index === res.data.data.length-1) {
+                            this.materielctrl()
+                        }
                     }
-                    this.valide()
                 })
             )
         },
+        materielctrl() {
+            console.log(this.ids);
+            // this.materiel.forEach(el =>
+            //     { for (let index = 0; index < this.materiel.length; index++) {
+            //         const ids = this.materiel.filter(data => data.id== el.id)
+            //         console.log(ids);
+            //     }}
+            // )
+        },
+        async matSortie() {
+           this.materiel.forEach(el =>
+                matService.sortie(el)
+                    .then(res => {
+                        if (res.data.error) {
+                            this.alert = true
+                            this.alertMsg = res.data.error
+                            this.typeAlert = 'error'
+                        }
+                    })
+            )
+            setTimeout(() => { this.valide() }, 1000)
+        },
         valide() {
             analyseService.validation(this.id)
-            .then(res => {
-                actionService.create({
-                    text: ` validée l'analyse numéro ${this.id}.`,
-                    id_user: this.idconnect,
-                });
-                this.alert = true
-                this.alertMsg = res.data.succee
-                this.typeAlert = 'success'
-                this.$emit('close')
-                setTimeout(()=>{ this.alert = false }, 3000)
-            })
+                .then(res => {
+                    actionService.create({
+                        text: ` validée l'analyse numéro ${this.id}.`,
+                        id_user: this.idconnect,
+                    });
+                    this.alert = true
+                    this.alertMsg = res.data.succee
+                    this.typeAlert = 'success'
+                   
+                    setTimeout(() => { this.$emit('close'), this.alert = false }, 3000)
+                })
         },
         getUserConnected() {
             let user = localStorage.getItem('user')
